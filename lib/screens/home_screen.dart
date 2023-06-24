@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:news/screens/profile.dart';
 import 'dart:convert';
+import 'package:news/screens/profile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<dynamic> searchNews(String query) {
     if (query.isEmpty) {
-      return newsData;
+      return [];
     } else {
       return newsData
           .where((news) => news['title']
@@ -86,44 +86,17 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(fontSize: 25),
             ),
             const Spacer(),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(15.0),
-                ),
-                child: Row(
-                  children: [
-                    IconTheme(
-                      data: const IconThemeData(
-                          color: Colors.purple), // Set the color of the icon
-                      child: IconButton(
-                        icon: const Icon(Icons.search),
-                        onPressed: () {
-                          setState(() {
-                            searchResults = searchNews(searchController.text);
-                          });
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: searchController,
-                        onChanged: (value) {
-                          setState(() {
-                            searchResults = searchNews(value);
-                          });
-                        },
-                        decoration: const InputDecoration(
-                          hintText: 'Search',
-                          border: InputBorder.none,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+            IconButton(
+              icon: const Icon(Icons.search),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SearchPage(newsData: newsData),
+                  ),
+                );
+              },
+              color: Colors.white,
             ),
           ],
         ),
@@ -133,14 +106,17 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(
-                'Malaysia Top Headlines',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+              padding: EdgeInsets.fromLTRB(16, 25, 16, 0),
+              child: Row(children: [
+                Text(
+                  'Top Headlines',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
+                Icon(Icons.newspaper_rounded)
+              ]),
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -201,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ProfilePage()),
+            MaterialPageRoute(builder: (context) => const ProfilePage()),
           );
         },
         backgroundColor: Colors.purple,
@@ -211,3 +187,100 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+class SearchPage extends StatefulWidget {
+  final List<dynamic> newsData;
+
+  const SearchPage({Key? key, required this.newsData}) : super(key: key);
+
+  @override
+  _SearchPageState createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
+  TextEditingController searchController = TextEditingController();
+  List<dynamic> searchResults = [];
+
+  List<dynamic> searchNews(String query) {
+    if (query.isEmpty) {
+      return [];
+    } else {
+      return widget.newsData
+          .where((news) => news['title']
+              .toString()
+              .toLowerCase()
+              .contains(query.toLowerCase()))
+          .toList();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.purple,
+        title: const Text('Search'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: searchController,
+              onChanged: (value) {
+                setState(() {
+                  searchResults = searchNews(value);
+                });
+              },
+              decoration: const InputDecoration(
+                hintText: 'Search news',
+                prefixIcon: Icon(Icons.search),
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            if (searchResults.isNotEmpty)
+              const Text(
+                'Search Results:',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            const SizedBox(height: 8.0),
+            Expanded(
+              child: ListView.builder(
+                itemCount: searchResults.length,
+                itemBuilder: (context, index) {
+                  final article = searchResults[index];
+
+                  return Card(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 8.0,
+                    ),
+                    child: ListTile(
+                      title: Text(
+                        article['title'],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: Text(
+                        article['source']['name'],
+                        style: const TextStyle(
+                          fontStyle: FontStyle.italic,
+                        ),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
