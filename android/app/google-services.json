@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "918550772859",
+    "project_id": "signin-news",
+    "storage_bucket": "signin-news.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:918550772859:android:1ff2a89339aec68aa4b6de",
+        "android_client_info": {
+          "package_name": "com.example.news"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "918550772859-680upb7t1pih49g9nsvapjnq1de93l4o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw7ihLVmsptYXSyYowTOp8RdOfrNXcZeU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "918550772859-680upb7t1pih49g9nsvapjnq1de93l4o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
