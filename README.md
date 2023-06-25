@@ -19,13 +19,13 @@ A mobile application for reading and browsing Malaysia news articles in real-tim
 
 ## Description
 
-The News App is a mobile application designed to provide users with a seamless experience for reading and browsing Malaysia news articles from a wide range of reliable sources in real-time using the free api from https://newsapi.org/s/malaysia-news-api. This app offers a user-friendly interface that prioritizes accessibility and convenience, ensuring that users can stay well-informed about current events with ease. With the integration of Firebase for authentication and data storage, the News App offers a secure and personalized platform for users to discover and engage with news content.
+The News App is a mobile application designed to provide users with a seamless experience for reading and browsing Malaysia news articles from a wide range of reliable sources in real-time using the free API from https://newsapi.org/s/malaysia-news-api. This app offers a user-friendly interface that prioritizes accessibility and convenience, ensuring that users can stay well-informed about current events with ease. With the integration of Firebase for authentication and data storage, the News App offers a secure and personalized platform for users to discover and engage with news content.
 
-The project utilize the following:
+The project utilizes the following:
 
 - The use of widgets.
 - The use of HTTP library for fetching data.
-- The use of Firebase for authentication and perform Create, Read, Update, and Delete (CRUD) operations.
+- The use of Firebase for authentication and performing Create, Read, Update, and Delete (CRUD) operations.
 
 
 ## Features
@@ -61,7 +61,7 @@ The project utilize the following:
    - Provides functionality to update the username, email, and password.
    - Updates changes to Firebase in real-time and reflects them on the screen.
    - Includes an option to delete the user account with confirmation.
-   - Allows users to log out of the app.
+   - Allows users to log out of the app with confirmation.
 
 ## Compilation and Running
 
