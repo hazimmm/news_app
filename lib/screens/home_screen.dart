@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:news/screens/profile.dart';
+import 'package:news/screens/News_Page_screen.dart';
+import 'dart:convert';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -13,14 +14,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final String apiUrl =
       'https://newsapi.org/v2/top-headlines?country=my&apiKey=5c385bdfe5aa44f38ce6d0140b895ce0';
-
   List<dynamic> newsData = [];
   List<dynamic> searchResults = [];
-
   List<String> categories = ['All'];
-
   TextEditingController searchController = TextEditingController();
   ScrollController categoryScrollController = ScrollController();
+
+  void navigateToNewsPage(String newsId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => NewsPage(newsId: newsId)),
+    );
+  }
 
   @override
   void initState() {
@@ -30,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> fetchNewsData() async {
     var response = await http.get(Uri.parse(apiUrl));
-
     if (response.statusCode == 200) {
       setState(() {
         newsData = jsonDecode(response.body)['articles'];
@@ -52,13 +56,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
   List<dynamic> searchNews(String query) {
     if (query.isEmpty) {
-      return [];
+      return newsData;
     } else {
       return newsData
-          .where((news) => news['title']
-              .toString()
-              .toLowerCase()
-              .contains(query.toLowerCase()))
+          .where((news) =>
+          news['title'].toString().toLowerCase().contains(query.toLowerCase()))
           .toList();
     }
   }
@@ -69,9 +71,14 @@ class _HomeScreenState extends State<HomeScreen> {
     } else {
       return newsData
           .where((news) =>
-              news['author'].toString().toLowerCase() == author.toLowerCase())
+      news['author'].toString().toLowerCase() == author.toLowerCase())
           .toList();
     }
+  }
+
+  void showNewsDetails(dynamic article) {
+    final index = newsData.indexOf(article);
+    navigateToNewsPage(index.toString());
   }
 
   @override
@@ -86,17 +93,43 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(fontSize: 25),
             ),
             const Spacer(),
-            IconButton(
-              icon: const Icon(Icons.search),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SearchPage(newsData: newsData),
-                  ),
-                );
-              },
-              color: Colors.white,
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Row(
+                  children: [
+                    IconTheme(
+                      data: const IconThemeData(color: Colors.purple),
+                      child: IconButton(
+                        icon: const Icon(Icons.search),
+                        onPressed: () {
+                          setState(() {
+                            searchResults = searchNews(searchController.text);
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: searchController,
+                        onChanged: (value) {
+                          setState(() {
+                            searchResults = searchNews(value);
+                          });
+                        },
+                        decoration: const InputDecoration(
+                          hintText: 'Search',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 8.0),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),
@@ -106,17 +139,14 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Padding(
-              padding: EdgeInsets.fromLTRB(16, 25, 16, 0),
-              child: Row(children: [
-                Text(
-                  'Top Headlines',
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
+              padding: EdgeInsets.all(16.0),
+              child: Text(
+                'Malaysia Top Headlines',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
                 ),
-                Icon(Icons.newspaper_rounded)
-              ]),
+              ),
             ),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -129,8 +159,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: const EdgeInsets.only(right: 8.0),
                       child: ChoiceChip(
                         label: Text(category),
-                        selected: searchController.text.toLowerCase() ==
-                            category.toLowerCase(),
+                        selected: searchController.text.toLowerCase() == category.toLowerCase(),
                         onSelected: (selected) {
                           setState(() {
                             searchController.text = selected ? category : '';
@@ -149,21 +178,24 @@ class _HomeScreenState extends State<HomeScreen> {
               itemCount: searchResults.length,
               itemBuilder: (context, index) {
                 final article = searchResults[index];
-
-                return Card(
-                  margin: const EdgeInsets.symmetric(
-                      horizontal: 16.0, vertical: 8.0),
-                  child: ListTile(
-                    title: Text(
-                      article['title'],
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
+                return InkWell(
+                  onTap: () {
+                    showNewsDetails(article);
+                  },
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                    child: ListTile(
+                      title: Text(
+                        article['title'],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    subtitle: Text(
-                      article['source']['name'],
-                      style: const TextStyle(
-                        fontStyle: FontStyle.italic,
+                      subtitle: Text(
+                        article['source']['name'],
+                        style: const TextStyle(
+                          fontStyle: FontStyle.italic,
+                        ),
                       ),
                     ),
                   ),
@@ -188,99 +220,4 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class SearchPage extends StatefulWidget {
-  final List<dynamic> newsData;
-
-  const SearchPage({Key? key, required this.newsData}) : super(key: key);
-
-  @override
-  _SearchPageState createState() => _SearchPageState();
-}
-
-class _SearchPageState extends State<SearchPage> {
-  TextEditingController searchController = TextEditingController();
-  List<dynamic> searchResults = [];
-
-  List<dynamic> searchNews(String query) {
-    if (query.isEmpty) {
-      return [];
-    } else {
-      return widget.newsData
-          .where((news) => news['title']
-              .toString()
-              .toLowerCase()
-              .contains(query.toLowerCase()))
-          .toList();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.purple,
-        title: const Text('Search'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
-              controller: searchController,
-              onChanged: (value) {
-                setState(() {
-                  searchResults = searchNews(value);
-                });
-              },
-              decoration: const InputDecoration(
-                hintText: 'Search news',
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            if (searchResults.isNotEmpty)
-              const Text(
-                'Search Results:',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            const SizedBox(height: 8.0),
-            Expanded(
-              child: ListView.builder(
-                itemCount: searchResults.length,
-                itemBuilder: (context, index) {
-                  final article = searchResults[index];
-
-                  return Card(
-                    margin: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 8.0,
-                    ),
-                    child: ListTile(
-                      title: Text(
-                        article['title'],
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: Text(
-                        article['source']['name'],
-                        style: const TextStyle(
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 
