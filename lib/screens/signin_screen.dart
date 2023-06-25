@@ -14,8 +14,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  TextEditingController _passwordTextController = TextEditingController();
-  TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _passwordTextController = TextEditingController();
+  final TextEditingController _emailTextController = TextEditingController();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -29,28 +29,45 @@ class _SignInScreenState extends State<SignInScreen> {
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [
-          hexStringToColor("CB2B93"),
-          hexStringToColor("9546C4"),
-          hexStringToColor("5E61F4")
-        ], begin: Alignment.topCenter, end: Alignment.bottomCenter)),
+          gradient: LinearGradient(
+            colors: [
+              hexStringToColor("CB2B93"),
+              hexStringToColor("9546C4"),
+              hexStringToColor("5E61F4")
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.fromLTRB(
-                20, MediaQuery.of(context).size.height * 0.2, 20, 0),
+              20,
+              MediaQuery.of(context).size.height * 0.2,
+              20,
+              0,
+            ),
             child: Column(
               children: <Widget>[
                 logoWidget("assets/images/logo.png"),
                 const SizedBox(
                   height: 30,
                 ),
-                reusableTextField("Enter Email", Icons.email_outlined, false,
-                    _emailTextController),
+                reusableTextField(
+                  "Enter Email",
+                  Icons.email_outlined,
+                  false,
+                  _emailTextController,
+                ),
                 const SizedBox(
                   height: 20,
                 ),
-                reusableTextField("Enter Password", Icons.lock_outline, true,
-                    _passwordTextController),
+                reusableTextField(
+                  "Enter Password",
+                  Icons.lock_outline,
+                  true,
+                  _passwordTextController,
+                ),
                 const SizedBox(
                   height: 5,
                 ),
@@ -58,32 +75,56 @@ class _SignInScreenState extends State<SignInScreen> {
                 Visibility(
                   visible: !_isLoading,
                   child: firebaseUIButton(context, "Sign In", () {
+                    if (_emailTextController.text.isEmpty ||
+                        _passwordTextController.text.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Incomplete Details'),
+                            content: Text('Please enter all details.'),
+                            actions: [
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      return;
+                    }
+
                     setState(() {
                       _isLoading = true;
                     });
                     FirebaseAuth.instance
                         .signInWithEmailAndPassword(
-                            email: _emailTextController.text,
-                            password: _passwordTextController.text)
+                      email: _emailTextController.text,
+                      password: _passwordTextController.text,
+                    )
                         .then((value) {
                       setState(() {
                         _isLoading = false;
                       });
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()));
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const HomeScreen()),
+                      );
                     }).catchError((error, stackTrace) {
                       setState(() {
                         _isLoading = false;
                       });
                       ScaffoldMessenger.of(context).showSnackBar(
-                      //  SnackBar(content: Text("Error: ${error.toString()}")),
-                      SnackBar(content: Text("Error: No User Found")),
+                        const SnackBar(content: Text("Error: No User Found. Try Again.")),
                       );
                     });
                   }),
                 ),
-                if (_isLoading) CircularProgressIndicator(),
-                signUpOption()
+                if (_isLoading) const CircularProgressIndicator(),
+                signUpOption(),
               ],
             ),
           ),
@@ -96,18 +137,22 @@ class _SignInScreenState extends State<SignInScreen> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text("Don't have an account?",
-            style: TextStyle(color: Colors.white70)),
+                const Text(
+          "Don't have an account?",
+          style: TextStyle(color: Colors.white70),
+        ),
         GestureDetector(
           onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => SignUpScreen()));
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SignUpScreen()),
+            );
           },
           child: const Text(
             " Sign Up",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
           ),
-        )
+        ),
       ],
     );
   }
@@ -124,8 +169,11 @@ class _SignInScreenState extends State<SignInScreen> {
           textAlign: TextAlign.right,
         ),
         onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => ResetPassword())),
+          context,
+          MaterialPageRoute(builder: (context) => const ResetPassword()),
+        ),
       ),
     );
   }
 }
+
