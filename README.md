@@ -1,6 +1,6 @@
 # News App
 
-A mobile application for reading and browsing Malaysia news articles in real-time.
+A mobile application for reading and browsing Malaysian news articles in real-time.
 
 ## Table of Contents
 
@@ -19,7 +19,7 @@ A mobile application for reading and browsing Malaysia news articles in real-tim
 
 ## Description
 
-The News App is a mobile application designed to provide users with a seamless experience for reading and browsing Malaysia news articles from a wide range of reliable sources in real-time using the free API from https://newsapi.org/s/malaysia-news-api. This app offers a user-friendly interface that prioritizes accessibility and convenience, ensuring that users can stay well-informed about current events with ease. With the integration of Firebase for authentication and data storage, the News App offers a secure and personalized platform for users to discover and engage with news content.
+The News App is a mobile application designed to provide users with a seamless experience for reading and browsing Malaysian news articles from a wide range of reliable sources in real-time using the free API from https://newsapi.org/s/malaysia-news-api. This app offers a user-friendly interface that prioritizes accessibility and convenience, ensuring that users can stay well-informed about current events with ease. With the integration of Firebase for authentication and data storage, the News App offers a secure and personalized platform for users to discover and engage with news content.
 
 The project utilizes the following:
 
