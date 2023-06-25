@@ -10,7 +10,12 @@ A mobile application for reading and browsing Malaysia news articles in real-tim
 - [Installation](#installation)
 - [Usage](#usage)
 
-## Description
+## Project Members
+
+1.  HAZIM IMRAN BIN ABD AZIZ (2110133)
+2.  NUR FARAH ADILAH BINTI RAHIM (2016490)
+3.  WAN MOHAMMAD LUQMANUL HAKIM BIN MAZLELEE (2111907)
+4.  NUR ZULFAH INSYIRAH BINTI FADZLEEY (2015384)
 
 ## Description
 
