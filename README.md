@@ -7,7 +7,7 @@ A mobile application for reading and browsing Malaysia news articles in real-tim
 - [Project Members](#projectmembers)
 - [Description](#description)
 - [Features](#features)
-- [Installation](#installation)
+- [Compilation and Running](#compilationandrunning)
 - [Usage](#usage)
 
 ## Project Members
@@ -63,7 +63,7 @@ The project utilize the following:
    - Includes an option to delete the user account with confirmation.
    - Allows users to log out of the app.
 
-## Installation
+## Compilation and Running
 
 To run the News App locally, follow these steps:
 
