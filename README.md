@@ -4,10 +4,10 @@ A mobile application for reading and browsing Malaysia news articles in real-tim
 
 ## Table of Contents
 
-- [Project Members](#projectmembers)
+- [Project Members](#project-members)
 - [Description](#description)
 - [Features](#features)
-- [Compilation and Running](#compilationandrunning)
+- [Compilation and Running](#compilation-and-running)
 - [Usage](#usage)
 
 ## Project Members
