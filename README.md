@@ -39,6 +39,8 @@ The project utilizes the following:
    - Provides error messages for incomplete or incorrect login details.
    - Offers a password reset option by sending an email to the user.
 
+   ![signin](https://github.com/hazimmm/news_app/assets/97010443/17e4cd7b-787c-4271-9235-bf0e15fb3e52)
+
 2. Sign Up Page
    - Enables users to create a new account.
    - Requests profile picture upload, username, email, and password.
@@ -46,15 +48,21 @@ The project utilizes the following:
    - Stores user details, including the profile picture, in Firebase.
    - Redirects to the home page upon successful sign-up.
 
+   ![signup](https://github.com/hazimmm/news_app/assets/97010443/cd784e4f-95ba-48de-80f7-1af365a7d598)
+
 3. Home Page
    - Users can scroll through a feed of news articles and view headlines.
    - Categorizes news articles by provider/company.
    - Users can search for specific news articles using keywords.
    - Includes a profile icon that allows users to access their user profile.
 
+   ![homescreen](https://github.com/hazimmm/news_app/assets/97010443/a87718ba-b900-4214-9cdc-945c07c94899)
+
 4. News Page
    - Users can read full articles.
    - Users can access this page by clicking on a news article from the home page.
+
+   ![news](https://github.com/hazimmm/news_app/assets/97010443/6aa30ba0-e3de-424a-9868-5a84661e11d7)
 
 5. User Profile Page
    - Displays the user's profile picture.
@@ -64,6 +72,8 @@ The project utilizes the following:
    - Updates changes to Firebase in real-time and reflects them on the screen.
    - Includes an option to delete the user account with confirmation.
    - Allows users to log out of the app with confirmation.
+
+   ![profile](https://github.com/hazimmm/news_app/assets/97010443/739da986-c3c5-4476-a302-bee0d6d82b4d)
 
 ## Compilation and Running
 
